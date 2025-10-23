@@ -1,0 +1,8 @@
+# Audio dependencies for Derek
+# Install with: pip install -r audio_requirements.txt
+
+PyAudio>=0.2.11
+sounddevice>=0.4.6
+soundfile>=0.12.1
+librosa>=0.10.0
+numpy>=1.24.0

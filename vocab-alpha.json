@@ -1,0 +1,99 @@
+{
+  "vocabulary": {
+    "alpha_keywords": [
+      "derek",
+      "alpha",
+      "ai",
+      "assistant",
+      "voice",
+      "speech",
+      "recognition",
+      "synthesis",
+      "nlp",
+      "natural",
+      "language",
+      "processing",
+      "learning",
+      "neural",
+      "network"
+    ],
+    "command_words": [
+      "listen",
+      "speak",
+      "analyze",
+      "process",
+      "understand",
+      "respond",
+      "learn",
+      "remember",
+      "forget",
+      "save",
+      "load",
+      "execute",
+      "run",
+      "stop",
+      "start",
+      "pause",
+      "resume"
+    ],
+    "emotion_words": [
+      "happy",
+      "sad",
+      "angry",
+      "excited",
+      "calm",
+      "confused",
+      "interested",
+      "bored",
+      "surprised",
+      "confident",
+      "uncertain"
+    ],
+    "technical_terms": [
+      "algorithm",
+      "data",
+      "model",
+      "training",
+      "inference",
+      "parameter",
+      "weight",
+      "bias",
+      "gradient",
+      "optimization",
+      "loss",
+      "accuracy",
+      "precision",
+      "recall"
+    ]
+  },
+  "phrases": {
+    "greetings": [
+      "hello",
+      "hi there",
+      "good morning",
+      "good afternoon",
+      "good evening",
+      "how are you"
+    ],
+    "farewells": [
+      "goodbye",
+      "see you later",
+      "talk to you soon",
+      "take care",
+      "have a great day"
+    ],
+    "acknowledgments": [
+      "i understand",
+      "got it",
+      "makes sense",
+      "i see",
+      "of course",
+      "certainly"
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2024-10-23",
+    "description": "Alpha vocabulary set for Derek AI NLP engine"
+  }
+}

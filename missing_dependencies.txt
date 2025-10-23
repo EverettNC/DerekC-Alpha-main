@@ -1,0 +1,21 @@
+# Critical dependencies for Derek exceptional upgrade
+python-dotenv>=1.0.0
+numpy>=1.24.0
+requests>=2.31.0
+openai>=1.12.0
+cryptography>=42.0.0
+jsonschema>=4.20.0
+fastapi>=0.109.0
+boto3>=1.34.0
+gtts>=2.5.0
+speech_recognition>=3.10.0
+pygame>=2.5.0
+pandas>=2.2.0
+pyyaml>=6.0.1
+aioschedule>=0.5.2
+websockets>=12.0
+pydantic>=2.6.0
+newspaper3k>=0.2.8
+flask>=3.0.0
+flask-sqlalchemy>=3.1.0
+mcp>=0.1.0
