@@ -28,6 +28,12 @@ import threading
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Disable vision in TensorFlow mode
+DEREK_MODE = os.getenv("DEREK_MODE", "").lower()
+VISION_ENABLED = DEREK_MODE not in ("tensorflow", "tf")
+if not VISION_ENABLED:
+    print("👁️ Vision system disabled in TensorFlow mode")
+
 # Setup logging
 logger = logging.getLogger(__name__)
 
@@ -353,7 +359,7 @@ class DerekUltimateVoice:
         try:
             from memory_mesh_bridge import MemoryMeshBridge
             from tone_manager import ToneManager
-            from vision_engine import VisionEngine
+           # from vision_engine import VisionEngine
             from emotion import analyze_emotion  # Fixed: was emotion_tagging
             from local_reasoning_engine import LocalReasoningEngine
             
@@ -364,18 +370,18 @@ class DerekUltimateVoice:
             # - Auto-consolidation (like sleep in humans)
             self.memory = MemoryMeshBridge(memory_dir="./derek_memory")
             self.tone_manager = ToneManager()
-            self.vision = VisionEngine()
+            #self.vision = VisionEngine()
             self.emotion_analyzer = analyze_emotion  # Function, not class
             self.local_reasoning_engine = LocalReasoningEngine()
             
             self.memory.load()  # Load all memory types
-            self.vision.start()  # async thread
+            #self.vision.start()  # async thread
             print("✅ Brain subsystems loaded with HUMAN-LIKE MEMORY MESH")
         except Exception as e:
             print(f"⚠️  Brain subsystems not available: {e}")
             self.memory = None
             self.tone_manager = None
-            self.vision = None
+            #self.vision = None
             self.emotion_analyzer = None
             self.local_reasoning_engine = None
         
@@ -532,12 +538,12 @@ class DerekUltimateVoice:
                 except:
                     pass
             
-            visual_state = ""
-            if hasattr(self, "vision") and self.vision:
-                try:
-                    visual_state = getattr(self.vision, "last_emotion", "")
-                except:
-                    pass
+            #visual_state = ""
+            #if hasattr(self, "vision") and self.vision:
+             #   try:
+              #      visual_state = getattr(self.vision, "last_emotion", "")
+               # except:
+                #    pass
             
             # 2️⃣  Check for proactive insights before responding
             proactive_insight = None
@@ -563,7 +569,7 @@ class DerekUltimateVoice:
                 user_input=user_input,
                 memory=mem_context,
                 emotion=emotion_state,
-                vision=visual_state
+                #vision=visual_state
             )
             
             # 4️⃣  Optional external lookup (only if explicitly required)
@@ -634,7 +640,7 @@ class DerekUltimateVoice:
                     user_input=user_input,
                     memory=memory,
                     emotion=emotion,
-                    vision=vision
+                    #vision=vision
                 )
             except Exception as e:
                 print(f"⚠️  Local reasoning error: {e}")
@@ -654,7 +660,7 @@ class DerekUltimateVoice:
             Context:
             Memory: {memory if memory else 'None'}
             Emotion: {emotion if emotion else 'Neutral'}
-            Vision: {vision if vision else 'None'}"""
+            #Vision: {vision if vision else 'None'}"""
             
             # Get master AI's response
             master_response = ""
@@ -686,8 +692,8 @@ class DerekUltimateVoice:
         context_parts = []
         if memory:
             context_parts.append(f"From memory: {memory}")
-        if vision:
-            context_parts.append(f"Visual context: {vision}")
+        #if vision:
+         #   context_parts.append(f"Visual context: {vision}")
         if emotion:
             context_parts.append(f"Emotional tone: {emotion}")
         

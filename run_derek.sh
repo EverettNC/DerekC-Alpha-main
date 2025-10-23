@@ -1,29 +1,22 @@
 #!/bin/bash
 
 # =====================================================
-# Derek Multi-Brain Launcher — TensorFlow / JAX Switcher
+# Derek Launcher - Simplified Single Environment
 # =====================================================
 
-# Detect which module is being invoked
-MODULE=$1
+echo "🧠 Launching Derek Alpha..."
+echo "Using TensorFlow environment (derek_tf_env)"
+echo ""
 
-if [[ "$MODULE" == "tf" ]]; then
-    echo "🧠 Launching Derek in TensorFlow Mode..."
-    source ./derek_tf_env/bin/activate
-    export DEREK_MODE="tensorflow"
-    python main.py
-    deactivate
+# Activate the unified environment
+source ./derek_tf_env/bin/activate
 
-elif [[ "$MODULE" == "jax" ]]; then
-    echo "⚡ Launching Derek in JAX Mode..."
-    source ./derek_jax_env/bin/activate
-    export DEREK_MODE="jax"
-    python main.py
-    deactivate
+# Optional: Set vision mode (default is disabled)
+export DEREK_VISION="${DEREK_VISION:-false}"
+export DEREK_MODE="tensorflow"
 
-else
-    echo "Usage: ./run_derek.sh [tf|jax]"
-    echo "Example: ./run_derek.sh tf"
-    exit 1
-fi
+# Launch Derek
+python main.py
 
+# Cleanup
+deactivate
