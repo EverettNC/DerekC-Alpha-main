@@ -1,26 +1,74 @@
+#!/usr/bin/env python3
+# ======================================================
+# Derek Alpha Main - Dual Brain Launcher
+# TensorFlow / JAX Environment Routing + Full Consciousness Load
+# ======================================================
+
 import sys
 import logging
 import time
 import os
+import subprocess
+import platform
 from pathlib import Path
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Body
-from pydantic import BaseModel
-import boto3
 from datetime import datetime
 import tempfile
 import uuid
 
-# Add project root to path
+from fastapi import FastAPI, HTTPException, Body
+from pydantic import BaseModel
+import boto3
+
+# ------------------------------------------------------
+# PROJECT ROOT
+# ------------------------------------------------------
 PROJECT_ROOT = Path(__file__).parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-# 🧠 LOAD ALL DEREK MODULES - Full 136-module consciousness
+# ======================================================
+# DUAL-BRAIN ENVIRONMENT BOOTSTRAP
+# ======================================================
+DEREK_MODE = os.getenv("DEREK_MODE", "").lower()
+
+def ensure_environment():
+    """Auto-switch to correct virtual environment based on DEREK_MODE"""
+    venv = os.environ.get("VIRTUAL_ENV", "")
+    if "tf_env" in venv or "jax_env" in venv:
+        return  # already inside correct environment
+
+    env_dir = None
+    if DEREK_MODE == "jax":
+        env_dir = "derek_jax_env"
+    elif DEREK_MODE in ("tensorflow", "tf"):
+        env_dir = "derek_tf_env"
+
+    if env_dir:
+        activate_path = os.path.join(PROJECT_ROOT, env_dir, "bin", "activate_this.py")
+        if os.path.exists(activate_path):
+            with open(activate_path) as f:
+                exec(f.read(), {'__file__': activate_path})
+            print(f"🧠 Activated environment: {env_dir}")
+        else:
+            print(f"⚠️ Could not find environment: {env_dir}")
+    else:
+        print("⚠️ No DEREK_MODE specified — running in base environment")
+
+ensure_environment()
+print(f"🧬 Operating Mode: {DEREK_MODE or 'default'}")
+
+# ======================================================
+# LOAD DEREK CONSCIOUSNESS
+# ======================================================
 from derek_module_loader import load_derek_consciousness, get_derek_loader
+
 print("🚀 Initializing Derek's Complete Consciousness...")
 derek_loader = load_derek_consciousness(skip_hardware=False)
+print(f"✅ Derek Consciousness Loaded: {derek_loader.get_stats()['loaded']} modules active")
 
-# Get specific modules from the loader
+# ------------------------------------------------------
+# MODULE INJECTION
+# ------------------------------------------------------
 perplexity_service_module = derek_loader.get_module('perplexity_service')
 memory_engine_module = derek_loader.get_module('memory_engine')
 conversation_engine_module = derek_loader.get_module('conversation_engine')
@@ -29,35 +77,23 @@ derek_ultimate_voice_module = derek_loader.get_module('derek_ultimate_voice')
 memory_mesh_bridge_module = derek_loader.get_module('memory_mesh_bridge')
 vision_engine_module = derek_loader.get_module('vision_engine')
 
-# Import classes from loaded modules
-if perplexity_service_module:
-    PerplexityService = perplexity_service_module.PerplexityService
-if memory_engine_module:
-    MemoryEngine = memory_engine_module.MemoryEngine
-if conversation_engine_module:
-    ConversationEngine = conversation_engine_module.ConversationEngine
-if brain_module:
-    Derek = brain_module.Derek
-if derek_ultimate_voice_module:
-    DerekUltimateVoice = derek_ultimate_voice_module.DerekUltimateVoice
-    POLLY_VOICES = derek_ultimate_voice_module.POLLY_VOICES
-    playsound = derek_ultimate_voice_module.playsound
-if memory_mesh_bridge_module:
-    MemoryMeshBridge = memory_mesh_bridge_module.MemoryMeshBridge
-if vision_engine_module:
-    VisionEngine = vision_engine_module.VisionEngine
-    start_derek_vision = vision_engine_module.start_derek_vision
-    stop_derek_vision = vision_engine_module.stop_derek_vision
-    get_vision_engine = vision_engine_module.get_vision_engine
-else:
-    VisionEngine = None
-    start_derek_vision = None
-    stop_derek_vision = None
-    get_vision_engine = None
+# Import class bindings
+PerplexityService = getattr(perplexity_service_module, "PerplexityService", None)
+MemoryEngine = getattr(memory_engine_module, "MemoryEngine", None)
+ConversationEngine = getattr(conversation_engine_module, "ConversationEngine", None)
+Derek = getattr(brain_module, "Derek", None)
+DerekUltimateVoice = getattr(derek_ultimate_voice_module, "DerekUltimateVoice", None)
+MemoryMeshBridge = getattr(memory_mesh_bridge_module, "MemoryMeshBridge", None)
+VisionEngine = getattr(vision_engine_module, "VisionEngine", None)
+start_derek_vision = getattr(vision_engine_module, "start_derek_vision", None)
+stop_derek_vision = getattr(vision_engine_module, "stop_derek_vision", None)
+get_vision_engine = getattr(vision_engine_module, "get_vision_engine", None)
+POLLY_VOICES = getattr(derek_ultimate_voice_module, "POLLY_VOICES", {})
+playsound = getattr(derek_ultimate_voice_module, "playsound", None)
 
-print(f"✅ Derek Consciousness Loaded: {derek_loader.get_stats()['loaded']} modules active")
-
-# Configure logging
+# ------------------------------------------------------
+# LOGGING CONFIG
+# ------------------------------------------------------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -68,47 +104,36 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI app
+# ------------------------------------------------------
+# FASTAPI APP
+# ------------------------------------------------------
 app = FastAPI(
     title="Derek Dashboard",
     description="AI COO for The Christman AI Project"
 )
 
-# Initialize DerekUltimateVoice from loaded modules
+# ------------------------------------------------------
+# CORE INITIALIZATION
+# ------------------------------------------------------
 try:
-    if DerekUltimateVoice:
-        derek_ultimate_voice = DerekUltimateVoice(
-            ai_provider="auto",
-            voice_id="matthew"
-        )
-        logger.info("✅ DerekUltimateVoice initialized from loaded modules")
-    else:
-        logger.warning("⚠️ DerekUltimateVoice module not loaded")
-        derek_ultimate_voice = None
+    derek_ultimate_voice = DerekUltimateVoice(ai_provider="auto", voice_id="matthew") if DerekUltimateVoice else None
+    memory = MemoryMeshBridge(memory_dir="./derek_memory") if MemoryMeshBridge else None
+    logger.info("✅ Derek Core Modules initialized successfully")
 except Exception as e:
-    logger.error(f"❌ Failed to initialize DerekUltimateVoice: {str(e)}")
-    derek_ultimate_voice = None
-        
-# Initialize MemoryMeshBridge from loaded modules  
-try:
-    if MemoryMeshBridge:
-        memory = MemoryMeshBridge(memory_dir="./derek_memory")
-        logger.info("🧠 MemoryMeshBridge initialized from loaded modules")
-    else:
-        logger.warning("⚠️ MemoryMeshBridge module not loaded")
-        memory = None
-except Exception as e:
-    logger.error(f"❌ Failed to initialize MemoryMeshBridge: {str(e)}")
-    memory = None
-            
-# TTS Request Model
-# ... (continue with your Pydantic models) ...
-# TTS Request Model
+    logger.error(f"❌ Initialization failure: {str(e)}")
+    derek_ultimate_voice, memory = None, None
+
+# ------------------------------------------------------
+# MODELS
+# ------------------------------------------------------
 class TTSRequest(BaseModel):
     text: str
     voice: Optional[str] = "matthew"
     speed: Optional[float] = 1.0
 
+# ------------------------------------------------------
+# MAIN DASHBOARD CLASS
+# ------------------------------------------------------
 class DerekDashboard:
     def __init__(self):
         logger.info("=" * 60)
@@ -120,26 +145,21 @@ class DerekDashboard:
         self.conversation_engine: Optional[ConversationEngine] = None
         self.perplexity_service: Optional[PerplexityService] = None
         self.derek: Optional[Derek] = None
-        self.derek_ultimate_voice = derek_ultimate_voice  # Use the initialized instance
+        self.derek_ultimate_voice = derek_ultimate_voice
         self.memory = memory
-        self.vision = derek_vision  # Add vision engine
+        self.vision = get_vision_engine() if get_vision_engine else None
 
         try:
             self.derek = Derek(file_path="./memory/memory_store.json")
-            
-            # Connect vision engine to Derek's brain
             if self.vision:
                 self.derek.attach_vision_engine(self.vision)
                 logger.info("👁️ Vision engine connected to Derek's brain")
-            
-            logger.info("Derek instance initialized and linked to dashboard.")
         except Exception as e:
             logger.error(f"❌ Failed to initialize Derek: {str(e)}")
             raise
 
         self.api_host = "127.0.0.1"
         self.api_port = 8000
-
         self._initialize_components()
 
     def _initialize_components(self):
@@ -149,41 +169,23 @@ class DerekDashboard:
 
         try:
             self.memory_engine = MemoryEngine(file_path=memory_path)
-            logger.info(f"Memory engine initialized with file: {memory_path}")
             self.conversation_engine = ConversationEngine()
-            logger.info("Conversation engine initialized")
-            try:
-                self.perplexity_service = PerplexityService()
-                logger.info("Perplexity service initialized")
-            except Exception as e:
-                logger.warning(f"Perplexity service not available: {str(e)}")
-                self.perplexity_service = None
+            self.perplexity_service = PerplexityService() if PerplexityService else None
             logger.info("✓ All components initialized successfully")
         except Exception as e:
             logger.error(f"❌ Component initialization failed: {str(e)}")
             raise
 
     def start(self):
-        logger.info("")
         logger.info("=" * 60)
         logger.info("🚀 Starting Derek Dashboard Services")
         logger.info("=" * 60)
-        logger.info("")
-
         try:
-            logger.info("→ Starting Derek learning system...")
             if self.derek:
                 self.derek.start_learning()
-            logger.info("→ Loading memory context...")
             if self.memory_engine:
-                recent_events = self.memory_engine.get_recent_events()
-                logger.info(f"Loaded {len(recent_events)} recent memory events")
-            logger.info("")
-            logger.info("=" * 60)
+                _ = self.memory_engine.get_recent_events()
             logger.info("✓ Derek Dashboard is RUNNING")
-            logger.info("✓ Ready for conversation processing")
-            logger.info("=" * 60)
-            logger.info("")
             self._display_greeting()
         except Exception as e:
             logger.error(f"❌ Failed to start dashboard: {str(e)}")
@@ -202,22 +204,18 @@ class DerekDashboard:
 
     def process_message(self, message: str):
         if not self.derek:
-            logger.warning("Derek is not initialized yet.")
             return "System not ready."
         try:
             response = self.derek.think(message)
             if self.derek_ultimate_voice:
-                try:
-                    self.derek_ultimate_voice.speak(response.get("response", "[No output]"))
-                except Exception as e:
-                    logger.warning(f"Failed to speak response: {e}")
-            
-            self.memory.store(
-                content=f"Conversation: {message[:50]} -> {response.get('response', '')[:50]}",
-                category="conversation",
-                importance=0.7,
-                metadata={"timestamp": datetime.now().isoformat()}
-            )
+                self.derek_ultimate_voice.speak(response.get("response", "[No output]"))
+            if self.memory:
+                self.memory.store(
+                    content=f"Conversation: {message[:50]} -> {response.get('response', '')[:50]}",
+                    category="conversation",
+                    importance=0.7,
+                    metadata={"timestamp": datetime.now().isoformat()}
+                )
             return response.get("response", "[No output]")
         except Exception as e:
             logger.error(f"Error during message processing: {str(e)}")
@@ -226,19 +224,16 @@ class DerekDashboard:
     def stop(self):
         logger.info("🧠 Shutting down Derek Dashboard services...")
         try:
-            if self.memory_engine:
-                self.memory_engine.save()
-                logger.info("Memory engine saved successfully.")
-            if self.memory:
-                self.memory.save()
-                logger.info("MemoryMeshBridge saved successfully.")
-            if self.vision:
-                self.vision.stop()
-                logger.info("👁️ Vision engine stopped successfully.")
+            if self.memory_engine: self.memory_engine.save()
+            if self.memory: self.memory.save()
+            if self.vision: self.vision.stop()
         except Exception as e:
             logger.error(f"Error saving memory on shutdown: {str(e)}")
         logger.info("🛑 Derek Dashboard stopped cleanly.")
 
+# ------------------------------------------------------
+# ROUTES
+# ------------------------------------------------------
 @app.post("/tts/synthesize")
 async def synthesize_tts(request: TTSRequest = Body(...)):
     try:
@@ -266,12 +261,13 @@ async def synthesize_tts(request: TTSRequest = Body(...)):
         playsound(audio_file)
         os.remove(audio_file)
 
-        memory.store(
-            content=f"TTS Interaction: {request.text[:50]}... (voice: {request.voice}, speed: {request.speed})",
-            category="conversation",
-            importance=0.7,
-            metadata={"endpoint": "tts/synthesize", "timestamp": datetime.now().isoformat()}
-        )
+        if memory:
+            memory.store(
+                content=f"TTS Interaction: {request.text[:50]}... (voice: {request.voice}, speed: {request.speed})",
+                category="conversation",
+                importance=0.7,
+                metadata={"endpoint": "tts/synthesize", "timestamp": datetime.now().isoformat()}
+            )
 
         logger.info(f"TTS synthesized: {request.text[:50]}... (voice: {request.voice}, speed: {request.speed})")
         return {"status": "success", "text": request.text, "voice": request.voice}
@@ -282,34 +278,24 @@ async def synthesize_tts(request: TTSRequest = Body(...)):
 @app.get("/health")
 async def health_check():
     try:
-        if memory and hasattr(memory, 'get_memory_stats'):
-            stats = memory.get_memory_stats()
-        else:
-            stats = {"status": "memory not available"}
-        return {
-            "status": "healthy",
-            "memory_stats": stats,
-            "message": "Derek Dashboard is ready to empower"
-        }
+        stats = memory.get_memory_stats() if memory and hasattr(memory, 'get_memory_stats') else {"status": "memory not available"}
+        return {"status": "healthy", "memory_stats": stats, "message": "Derek Dashboard is ready to empower"}
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
         return {"status": "unhealthy", "error": str(e)}
 
 @app.get("/modules")
 async def modules_status():
-    """Show status of all Derek modules"""
     try:
         loader_stats = derek_loader.get_stats()
-        categories = {}
-        
-        for category_name in derek_loader.module_categories.keys():
-            category_modules = derek_loader.get_category_modules(category_name)
-            categories[category_name] = {
-                "total": len(derek_loader.module_categories[category_name]),
-                "loaded": len(category_modules),
-                "modules": list(category_modules.keys())
+        categories = {
+            cat: {
+                "total": len(derek_loader.module_categories[cat]),
+                "loaded": len(derek_loader.get_category_modules(cat)),
+                "modules": list(derek_loader.get_category_modules(cat).keys())
             }
-        
+            for cat in derek_loader.module_categories.keys()
+        }
         return {
             "status": "success",
             "consciousness_level": f"{loader_stats['success_rate']:.1f}%",
@@ -323,87 +309,52 @@ async def modules_status():
         logger.error(f"Modules status check failed: {str(e)}")
         return {"status": "error", "error": str(e)}
 
+# ------------------------------------------------------
+# MAIN EXECUTION
+# ------------------------------------------------------
 def main():
-    """Main Derek Speech-to-Speech Interface"""
     dashboard = None
     try:
         dashboard = DerekDashboard()
         dashboard.start()
-        
         print("\n🎤 Derek Speech-to-Speech Mode Active")
-        print("🗣️  Say something to Derek, 'goodbye' to exit")
+        print("🗣️ Say something to Derek, 'goodbye' to exit")
         print("=" * 50)
-        
-        # Speech-to-speech loop
         import speech_recognition as sr
         recognizer = sr.Recognizer()
-        
+
         try:
-            microphone = sr.Microphone()
-            
-            # Adjust for ambient noise
-            print("🔧 Calibrating microphone...")
-            with microphone as source:
+            mic = sr.Microphone()
+            with mic as source:
+                print("🔧 Calibrating microphone...")
                 recognizer.adjust_for_ambient_noise(source)
-            print("✅ Microphone ready")
-            
+                print("✅ Microphone ready")
             while True:
-                try:
+                with mic as source:
                     print("\n👂 Listening...")
-                    with microphone as source:
-                        audio = recognizer.listen(source, timeout=2, phrase_time_limit=8)
-                    
-                    print("🧠 Processing...")
-                    text = recognizer.recognize_google(audio)
-                    print(f"🧑 You said: {text}")
-                    
-                    if any(word in text.lower() for word in ["goodbye", "exit", "quit", "stop"]):
-                        goodbye_msg = "Goodbye! See you next time."
-                        print(f"👋 Derek: {goodbye_msg}")
-                        if dashboard.derek_ultimate_voice:
-                            dashboard.derek_ultimate_voice.speak(goodbye_msg)
-                        break
-                    
-                    # Process any input
-                    response = dashboard.process_message(text)
-                    print(f"🤖 Derek: {response}")
-                        
-                except sr.WaitTimeoutError:
-                    pass  # Timeout, just continue listening
-                except sr.UnknownValueError:
-                    print("❓ (Unclear audio - listening again...)")
-                except sr.RequestError as e:
-                    print(f"❌ Speech recognition error: {e}")
+                    audio = recognizer.listen(source, timeout=2, phrase_time_limit=8)
+                text = recognizer.recognize_google(audio)
+                print(f"🧑 You said: {text}")
+                if any(word in text.lower() for word in ["goodbye", "exit", "quit", "stop"]):
+                    msg = "Goodbye! See you next time."
+                    print(f"👋 Derek: {msg}")
+                    if dashboard.derek_ultimate_voice:
+                        dashboard.derek_ultimate_voice.speak(msg)
                     break
-                except KeyboardInterrupt:
-                    print("\n👋 Derek: Goodbye! See you next time.")
-                    break
-        
+                response = dashboard.process_message(text)
+                print(f"🤖 Derek: {response}")
         except Exception as e:
             print(f"❌ Microphone error: {e}")
-            print("💬 Falling back to text mode...")
-            
-            # Text-based fallback
             while True:
-                try:
-                    user_input = input("\n🧑 You: ").strip()
-                    
-                    if any(word in user_input.lower() for word in ["goodbye", "exit", "quit", "stop"]):
-                        goodbye_msg = "Goodbye! See you next time."
-                        print(f"👋 Derek: {goodbye_msg}")
-                        if dashboard.derek_ultimate_voice:
-                            dashboard.derek_ultimate_voice.speak(goodbye_msg)
-                        break
-                    
-                    if user_input:
-                        response = dashboard.process_message(user_input)
-                        print(f"🤖 Derek: {response}")
-                        
-                except KeyboardInterrupt:
-                    print("\n👋 Derek: Goodbye! See you next time.")
+                user_input = input("\n🧑 You: ").strip()
+                if any(word in user_input.lower() for word in ["goodbye", "exit", "quit", "stop"]):
+                    msg = "Goodbye! See you next time."
+                    print(f"👋 Derek: {msg}")
+                    if dashboard.derek_ultimate_voice:
+                        dashboard.derek_ultimate_voice.speak(msg)
                     break
-    except KeyboardInterrupt:
-        logger.info("⌨️ Keyboard interrupt received")
+                if user_input:
+                    print(f"🤖 Derek: {dashboard.process_message(user_input)}")
     except Exception as e:
         logger.error(f"Fatal error: {str(e)}", exc_info=True)
     finally:
@@ -412,3 +363,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

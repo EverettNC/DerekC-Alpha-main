@@ -225,3 +225,11 @@ public/assets/
 *.orig
 *.old
 *.save
+alphaenv/
+derek_jax_env/
+derek_tf_env/
+*.pyc
+__pycache__/
+.env
+.DS_Store
+
