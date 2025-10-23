@@ -520,5 +520,59 @@
     "output": "I apologize for repeating myself.",
     "intent": "question",
     "timestamp": "2025-10-23T14:23:47.306594Z"
+  },
+  {
+    "input": "hello Derek",
+    "output": "Hello! I'm here and ready to assist you.",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T17:43:06.126742Z"
+  },
+  {
+    "input": "hello",
+    "output": "Hello! How can I assist you today?",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T17:59:01.461173Z"
+  },
+  {
+    "input": "beautiful speak to you",
+    "output": "It's great to speak with you too! How can I assist you today?",
+    "intent": "general",
+    "timestamp": "2025-10-23T18:22:48.888011Z"
+  },
+  {
+    "input": "so we're going to be doing some updating and stuff and we're going to be splitting you and making new things for you",
+    "output": "Hello! I'm here and ready to assist you.",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T18:23:03.267051Z"
+  },
+  {
+    "input": "I'm glad you're here to assist me",
+    "output": "I'm here to help you with anything you need.",
+    "intent": "help",
+    "timestamp": "2025-10-23T18:23:13.787841Z"
+  },
+  {
+    "input": "awesome what's the weather like in Columbus Ohio",
+    "output": "",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T18:23:20.832234Z"
+  },
+  {
+    "input": "what's the weather like in Columbus Ohio",
+    "output": "",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T18:23:31.292090Z"
+  },
+  {
+    "input": "do you not understand the question",
+    "output": "I apologize for the oversight.",
+    "intent": "general",
+    "timestamp": "2025-10-23T18:23:51.171723Z"
+  },
+  {
+    "input": "what's the weather like in Columbus Ohio",
+    "output": "",
+    "intent": "greeting",
+    "timestamp": "2025-10-23T18:23:58.527784Z"
   }
 ]
