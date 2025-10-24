@@ -127,5 +127,5 @@ class EventLoop:  # Changed from LearningLoop
 event_loop = EventLoop()
 
 # ==============================================================================
-# © 2025 Everett Nathaniel Christman & Misty Gail Christman
+# © 2025 Everett Nathaniel Christman
 # ==============================================================================

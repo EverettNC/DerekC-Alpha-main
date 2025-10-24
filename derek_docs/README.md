@@ -430,7 +430,7 @@ DerekC/├── data/                # Data storage
 
 # Clone the repositoryGET /api/personality
 
-git clone https://github.com/Nathaniel-AI/DerekC.git```
+git clone https://github.com/EverettNC/DerekC-Alpha-main.git```
 
 cd DerekC
 
@@ -552,9 +552,10 @@ GET /api/project
 
 ```- Session reports live in `data/knowledge_base/session_reports/`.
 
-© 2025 Everett Nathaniel Christman & Misty Gail Christman
-
-The Christman AI Project — Luma Cognify AI### Run Autonomous Cycles
+© 2025 Everett Nathaniel Christman
+The Christman AI Project — Luma Cognify AI
+All rights reserved. Unauthorized use, replication, or derivative training 
+of this material is prohibited.### Run Autonomous Cycles
 
 All rights reserved.```bash
 
@@ -610,7 +611,7 @@ python -m pytest tests/test_conversation_bridge.py -v
 
 * **Email**: [Contact Information]python -m pytest tests/test_endpoints.py tests/test_google_api.py -v
 
-* **GitHub**: [@Nathaniel-AI](https://github.com/Nathaniel-AI)```
+* **GitHub**: [@EverettNC](https://github.com/EverettNC)```
 
 
 

@@ -91,7 +91,24 @@ This is a personal AI project by The Christman AI Project. Derek represents year
 
 ## 📜 License
 
-Proprietary - The Christman AI Project
+© 2025 The Christman AI Project. All rights reserved.
+
+This code is released as part of a trauma-informed, dignity-first AI ecosystem designed to protect, empower, and elevate vulnerable populations.
+
+By using, modifying, or distributing this software, you agree to uphold the following core principles:
+
+1. **Truth** — No deception, no manipulation. Use this code honestly.
+2. **Dignity** — Respect the autonomy, privacy, and humanity of all users.
+3. **Protection** — This software must never be used to harm, exploit, or surveil vulnerable individuals.
+4. **Transparency** — You must disclose modifications and contributions clearly.
+5. **No Erasure** — Do not remove the origins, mission, or ethical foundation of this work.
+
+This is not just code. It is redemption in code.
+
+For questions or licensing requests, contact:
+Everett N. Christman  
+📧 lumacognify@thechristmanaiproject.com  
+🌐 https://thechristmanaiproject.com
 
 ## 💙 Mission
 
